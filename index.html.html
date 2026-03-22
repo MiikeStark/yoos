@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores Amarillas para ti</title>
+    <style>
+        /* Importamos las fuentes elegantes */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@400;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a050f; /* Fondo oscuro para resaltar la tarjeta */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden; /* Evita barras de desplazamiento en el cuerpo principal */
+        }
+
+        .card {
+            background-color: #f7efe5;
+            border-radius: 25px;
+            padding: 40px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            /* CAMBIO: Oculta las flores cuando salen de los bordes de la tarjeta */
+            overflow: hidden; 
+        }
+
+        /* CAMBIO: Asegura que el contenido esté por encima de las flores internas */
+        .content, .footer {
+            position: relative;
+            z-index: 2; 
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .text-section {
+            flex: 1;
+            min-width: 300px;
+            color: #4a3b32;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .text-section p {
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #5c4738;
+        }
+
+        .tree-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 300px;
+        }
+
+        /* Dando forma al árbol frondoso */
+        .tree-canopy {
+            font-size: 1.8rem; /* Tamaño ajustado para encajar más flores */
+            line-height: 1.1;
+            text-align: center;
+            user-select: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -2px; /* Junta un poco los girasoles para mayor densidad */
+        }
+
+        .tree-trunk {
+            width: 40px;
+            height: 110px;
+            background-color: #6b4423;
+            margin-top: -10px;
+            border-radius: 5px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #2a1f18; /* Línea divisoria elegante */
+            text-align: center;
+        }
+
+        .romantic-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            color: #2a1f18;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* Animación de flores cayendo DENTRO de la tarjeta */
+        .falling-flower {
+            /* CAMBIO: Posición absoluta relativa a .card */
+            position: absolute; 
+            top: -50px; /* Empieza justo arriba del borde superior de la tarjeta */
+            font-size: 1.5rem;
+            /* CAMBIO: Z-index bajo para estar detrás del texto pero dentro de la tarjeta */
+            z-index: 1; 
+            animation: fallInternal linear forwards;
+            pointer-events: none;
+        }
+
+        /* CAMBIO: Nueva animación para caer dentro del contenedor */
+        @keyframes fallInternal {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            /* Cae una distancia fija hacia abajo, overflow:hidden la ocultará al salir */
+            100% { transform: translateY(800px) rotate(360deg); opacity: 0; } 
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="content">
+            <div class="text-section">
+                <p>Flores Amarillas para El sol que ilumina:</p>
+                <p>Si pudiera elegir un lugar seguro, sería a tu lado.</p>
+                <p>La distancia es un espacio fisico que no aplica para corazones.</p>
+                <p class="signature">— I Love You!<span class="cursor">_</span></p>
+            </div>
+            
+            <div class="tree-section">
+                <div class="tree-canopy">
+                    💛💛💛<span style="visibility: hidden;">💛💛💛</span>💛💛💛<br>
+                    🌻🌻🌻🌻🌻<span style="visibility: hidden;">🌻</span>🌻🌻🌻🌻<br>
+                    🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻<br>
+                    🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻🌻<br>
+                    🌻🌻🌻🌻🌻🌻🌻🌻🌻<br>
+                    🌻🌻🌻🌻🌻🌻🌻<br>
+                    🌻🌻🌻🌻🌻<br>
+                    🌻🌻🌻<br>
+                    🌻
+                </div>
+                <div class="tree-trunk"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p class="romantic-quote">"Así como los girasoles buscan el sol, así mi corazón, buscará tu luz"</p>
+        </div>
+    </div>
+
+    <script>
+        // Lógica de las flores cayendo por la pantalla DENTRO de la tarjeta
+        function createFlower() {
+            // CAMBIO: Selecciona el elemento de la tarjeta
+            const cardElement = document.querySelector('.card');
+            
+            const flower = document.createElement('div');
+            flower.innerText = '🌻';
+            flower.classList.add('falling-flower');
+            
+            // CAMBIO: Posición inicial aleatoria relativa al ancho de la TARJETA (%)
+            flower.style.left = Math.random() * 100 + '%';
+            
+            // Velocidad de caída aleatoria entre 3 y 7 segundos
+            flower.style.animationDuration = (Math.random() * 4 + 3) + 's'; 
+            
+            // CAMBIO: Añade la flor dentro de la tarjeta, no del body
+            cardElement.appendChild(flower); 
+            
+            // Eliminar la flor después de que cae para no sobrecargar el navegador
+            setTimeout(() => {
+                flower.remove();
+            }, 7000);
+        }
+
+        // Generar una flor nueva cada 300 milisegundos
+        setInterval(createFlower, 300);
+    </script>
+</body>
+</html>
